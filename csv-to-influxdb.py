@@ -83,13 +83,6 @@ def loadCsv(inputfilename, servername, user, password, dbname, metric,
 
             timestamp = unix_time_millis(datetime_local) * 1000000 # in nanoseconds
 
-            tags = {}
-            for t in tagcolumns:
-                v = 0
-                if t in row:
-                    v = row[t]
-                tags[t] = v
-
             fields = {}
             for f in fieldcolumns:
                 v = 0.0
@@ -104,7 +97,17 @@ def loadCsv(inputfilename, servername, user, password, dbname, metric,
                     fields[f] = v
 
 
-            point = {"measurement": metric, "time": timestamp, "fields": fields, "tags": tags}
+            point = {"measurement": metric, "time": timestamp, "fields": fields}
+
+            if tagcolumns is not None:
+                tags = {}
+                for t in tagcolumns:
+                    v = 0
+                    if t in row:
+                        v = row[t]
+                    tags[t] = v
+
+                point['tags'] = tags
 
             datapoints.append(point)
             count+=1
@@ -179,7 +182,7 @@ if __name__ == "__main__":
     parser.add_argument('--fieldcolumns', nargs='?', default='value',
                         help='List of csv columns to use as fields, separated by comma, e.g.: value1,value2. Default: value')
 
-    parser.add_argument('--tagcolumns', nargs='?', default='host',
+    parser.add_argument('--tagcolumns', nargs='?', default=None,
                         help='List of csv columns to use as tags, separated by comma, e.g.: host,data_center. Default: host')
 
     parser.add_argument('-g', '--gzip', action='store_true', default=False,

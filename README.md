@@ -44,7 +44,7 @@ optional arguments:
                         comma, e.g.: value1,value2. Default: value
   --tagcolumns [TAGCOLUMNS]
                         List of csv columns to use as tags, separated by
-                        comma, e.g.: host,data_center. Default: host
+                        comma, e.g.: host,data_center. Default: None (= no tags)
   -g, --gzip            Compress before sending to influxdb.
   -b BATCHSIZE, --batchsize BATCHSIZE
                         Batch size. Default: 5000.
